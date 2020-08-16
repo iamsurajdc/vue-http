@@ -1,28 +1,46 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
+        <h1 class="text-center">HTTP</h1>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" class="form-control" v-model="user.username" />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" class="form-control" v-model="user.email" />
+        </div>
+        <button class="btn btn-primary" @click="submit">Submit</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  data() {
+    return {
+      user: {
+        username: "",
+        email: "",
+      },
+    };
+  },
+  methods: {
+    submit() {
+      this.$http
+        .post("https://vue-http-46012.firebaseio.com/user.json", this.user)
+        .then(
+          (response) => {
+            console.log("submit -> response", response);
+          },
+          (error) => console.error(error)
+        );
+    },
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
