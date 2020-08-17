@@ -12,6 +12,12 @@
           <input type="text" class="form-control" v-model="user.email" />
         </div>
         <button class="btn btn-primary" @click="submit">Submit</button>
+        <hr />
+        <button class="btn btn-primary" @click="fetchData">Get Data</button>
+        <hr />
+        <ul class="list-group">
+          <li class="list-group-item" v-for="(u, i) of users" :key="i">{{u.username}} - {{u.email}}</li>
+        </ul>
       </div>
     </div>
   </div>
@@ -25,18 +31,19 @@ export default {
         username: "",
         email: "",
       },
+      users: [],
+      BASE_URL: process.env.VUE_APP_API_URL,
     };
   },
   methods: {
     submit() {
-      this.$http
-        .post("https://vue-http-46012.firebaseio.com/user.json", this.user)
-        .then(
-          (response) => {
-            console.log("submit -> response", response);
-          },
-          (error) => console.error(error)
-        );
+      this.$axios.post(this.BASE_URL, this.user).then((response) => {
+        console.log("submit -> response", response);
+      });
+    },
+    async fetchData() {
+      let response = await this.$axios.get(this.BASE_URL);
+      this.users = response.data;
     },
   },
 };
